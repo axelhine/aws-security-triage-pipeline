@@ -1,0 +1,10 @@
+
+{
+  "incident_id": "INC-001",
+  "source": "Simulated SIEM",
+  "severity": "HIGH",
+  "alert_type": "Suspicious Network Connection",
+  "source_ip": "192.0.2.10",
+  "destination_ip": "198.51.100.25",
+  "description": "Simulated alert for security triage training"
+}

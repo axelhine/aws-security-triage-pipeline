@@ -1,0 +1,19 @@
+
+# Python-generated files
+__pycache__/
+*.pyc
+.venv/
+venv/
+
+# Local configuration and secrets
+.env
+.env.*
+*.pem
+*.key
+
+# AWS local configuration
+.aws/
+.aws-sam/
+
+# Editor files
+.vscode/

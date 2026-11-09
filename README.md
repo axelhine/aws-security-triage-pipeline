@@ -88,3 +88,37 @@ Each completed milestone will document:
 ## Disclaimer
 
 This is an educational cybersecurity project under active development and is not intended for production incident response.
+
+## Milestone 1: Python & Security Alert Foundations
+
+**Status:** Completed
+
+### Implementation
+
+Developed a Python application capable of reading simulated security alerts from JSON files, extracting incident information, and classifying alerts according to their reported severity.
+
+### Features Implemented
+
+- JSON file parsing
+- Incident metadata extraction
+- Conditional severity classification
+- Missing severity handling
+- Malformed JSON exception handling
+- Basic input structure validation
+
+### Testing
+
+Successfully tested:
+- Valid JSON alert processing
+- HIGH and LOW severity classifications
+- Missing severity values
+- Malformed JSON handling
+- Recovery after restoring a valid alert file
+
+### Skills Learned
+
+Python fundamentals, JSON parsing, conditional logic, exception handling, introductory input validation, and Git version control.
+
+### Limitations
+
+The application currently processes simulated alerts. It does not independently detect malicious activity, validate IP addresses, or integrate with live AWS telemetry.

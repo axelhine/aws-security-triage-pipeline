@@ -122,3 +122,25 @@ Python fundamentals, JSON parsing, conditional logic, exception handling, introd
 ### Limitations
 
 The application currently processes simulated alerts. It does not independently detect malicious activity, validate IP addresses, or integrate with live AWS telemetry.
+## Milestone 2: IOC Extraction & Validation
+
+**Status:** In Progress
+
+### Objective
+Develop a Python-based IOC validation module capable of examining IP addresses extracted from simulated security alerts.
+
+### Planned Implementation
+- Validate IPv4 addresses using Python's built-in `ipaddress` module.
+- Integrate validation with the existing JSON alert processor.
+- Classify IP addresses according to their network characteristics.
+- Handle malformed and missing indicators without crashing the application.
+- Document validation results and known limitations.
+
+### Security Considerations
+A syntactically valid IP address is not necessarily malicious. IOC validation verifies the structure of an indicator, while threat intelligence enrichment and contextual analysis are needed to assess potential security risk.
+
+### Testing
+Testing will include valid IPv4 addresses, malformed addresses, missing fields, and special-use address ranges.
+
+### Future Integration
+The validation module will eventually run within AWS Lambda as part of an automated serverless security triage pipeline.

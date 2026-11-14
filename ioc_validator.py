@@ -12,8 +12,11 @@ def validate_ip(ip):
 
 
 # Test cases
-print(validate_ip("192.0.2.10"))
-print(validate_ip("999.999.999.999"))
-print(validate_ip("198.51.100.25"))
-print(validate_ip("hello.world"))
-print(validate_ip(""))
+
+if __name__ == "__main__":
+    print(validate_ip("192.0.2.10"))
+    print(validate_ip("999.999.999.999"))
+    print(validate_ip("198.51.100.25"))
+    print(validate_ip("hello.world"))
+    print(validate_ip(""))
+

@@ -2,6 +2,7 @@
 
 import json
 import sys
+from ioc_validator import validate_ip
 
 # Attempt to load the security alert
 try:
@@ -53,3 +54,21 @@ elif severity == "LOW":
 else:
     print("Priority: UNKNOWN")
     print("Action: Verify the alert's severity.")
+
+print("Destination IP:", destination_ip)
+print("=============================")
+
+# Validate the IP addresses extracted from the alert
+print("\n=== IOC VALIDATION ===")
+
+if validate_ip(source_ip):
+    print("Source IP: VALID")
+else:
+    print("Source IP: INVALID")
+
+if validate_ip(destination_ip):
+    print("Destination IP: VALID")
+else:
+    print("Destination IP: INVALID")
+
+print("======================")

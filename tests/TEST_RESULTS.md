@@ -26,3 +26,22 @@ The validator correctly accepted valid IPv4 addresses and rejected malformed add
 
 ## Conclusion
 The initial IPv4 validation functionality passed all five tests. Further development will focus on integration with the main security alert processor.
+
+## Integration Testing — Issue #2
+
+### Objective
+Verify that main.py successfully imports the IOC
+validator and validates IP addresses extracted
+from alert.json.
+
+| Test ID | Test Case | Expected Result | Status |
+|---|---|---|---|
+| TC-06 | Valid source and destination IPs | Both VALID | Pending |
+| TC-07 | Invalid source IP | Source INVALID | Pending |
+| TC-08 | Existing severity classification | Classification still works | Pending |
+
+### Findings
+To be completed after testing.
+
+### Conclusion
+To be completed after testing.

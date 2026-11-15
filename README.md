@@ -1,146 +1,316 @@
 # Automated Security Alert & IOC Triage Pipeline
 
-**Project Status:** In Development  
+**Project Status:** In Development — Milestones 1 & 2 Completed  
 **Project Type:** Cybersecurity | Cloud Security | Security Automation  
-**Technologies:** Python, JSON, Git, GitHub, AWS (Planned)
+**Technologies:** Python, JSON, Git, GitHub, Python `ipaddress` Library  
+**Planned Technologies:** AWS Lambda, Amazon S3, Amazon DynamoDB, Amazon VPC Flow Logs, AWS IAM
+
+---
 
 ## Project Overview
 
 This project focuses on developing an automated security alert processing and Indicator of Compromise (IOC) triage pipeline using Python and Amazon Web Services (AWS).
 
-The objective is to build a system that can eventually receive real security alerts from an AWS cloud environment, extract suspicious indicators, evaluate potential security risks, and generate structured incident reports.
+The long-term objective is to build a serverless security pipeline capable of processing security alerts generated from authorized AWS environments, extracting relevant indicators, enriching them with threat intelligence, assessing potential security risks, and generating structured incident reports.
 
-The project is being developed incrementally to build practical cybersecurity knowledge, programming skills, and cloud security experience.
+Development follows an incremental, milestone-based approach emphasizing practical cybersecurity knowledge, programming skills, cloud security, testing, and technical documentation.
+
+**Current implementation:** A local Python application that processes simulated JSON security alerts, validates and classifies IPv4 addresses, and evaluates reported alert severity.
+
+The application does not currently determine whether an indicator is malicious.
 
 ## Project Objectives
 
-- Understand how security monitoring and incident triage work.
-- Learn Python programming through cybersecurity applications.
-- Extract and analyze Indicators of Compromise (IOCs).
-- Implement automated threat intelligence enrichment.
-- Develop basic risk classification and reporting.
-- Integrate AWS services to process real cloud security telemetry.
-- Document technical decisions, challenges, and lessons learned.
+- Understand security monitoring and incident triage workflows.
+- Develop Python programming skills through cybersecurity applications.
+- Extract and validate indicators from structured security alerts.
+- Classify IPv4 addresses according to network characteristics.
+- Implement external threat intelligence enrichment.
+- Develop evidence-based risk scoring and automated triage.
+- Integrate AWS services for cloud security telemetry processing.
+- Document implementation decisions, testing results, and technical limitations.
 
 ## Development Milestones
 
 | Milestone | Description | Status |
 |---|---|---|
-| 1 | Python & JSON Alert Processing | In Progress |
-| 2 | IOC Extraction & Validation | Planned |
+| 1 | Python & Security Alert Foundations | Completed |
+| 2 | IOC Extraction & Validation | Completed |
 | 3 | Threat Intelligence Enrichment | Planned |
 | 4 | Automated Triage & Risk Scoring | Planned |
 | 5 | AWS Cloud Integration | Planned |
 | 6 | Testing, Documentation & Final Demonstration | Planned |
 
-## Milestone 1: Python & Security Alert Foundations
+## Current Project Structure
 
-**Objective:** Build a basic Python program that reads simulated cybersecurity alerts from a JSON file.
+```text
+security-triage-pipeline/
+├── main.py
+├── ioc_validator.py
+├── alert.json
+├── tests/
+│   └── TEST_RESULTS.md
+├── README.md
+└── .gitignore
+```
 
-### Skills Being Developed
+### File Descriptions
 
-- Python fundamentals
-- JSON parsing
-- Security alert structure
-- Basic incident information extraction
-- Command-line execution
-- Git version control
+| File | Purpose |
+|---|---|
+| `main.py` | Loads JSON alerts, extracts incident information, validates and classifies IP addresses, and reports severity |
+| `ioc_validator.py` | Contains reusable IPv4 validation and classification functions |
+| `alert.json` | Provides simulated security alert data |
+| `tests/TEST_RESULTS.md` | Documents test cases, expected results, observed results, and limitations |
+| `.gitignore` | Defines files Git should exclude from version control |
 
-### Expected Deliverables
+## Current Capabilities
 
-- `main.py` — Python security alert processor
-- `alert.json` — Simulated security alert
-- `README.md` — Project documentation
+### 1. JSON Security Alert Processing
 
-### Current Progress
+The application reads simulated security alerts from `alert.json` and extracts relevant incident metadata.
 
-The initial project files have been created. Functional testing and further development are ongoing.
+Supported fields include:
 
-## Planned AWS Architecture
+- Incident ID
+- Reported severity
+- Source IPv4 address
+- Destination IPv4 address
 
-The future pipeline is intended to use:
+### 2. IPv4 Address Validation
 
-1. **Amazon VPC Flow Logs:** Collect network connection metadata.
-2. **AWS Lambda:** Process alerts automatically.
-3. **Amazon DynamoDB:** Store incident metadata and triage results.
-4. **Amazon S3:** Retain security evidence and reports.
-5. **AWS IAM:** Control access to cloud resources.
+The application uses Python's built-in `ipaddress` module to validate IPv4 address syntax.
 
-Additional services may be introduced as the project develops.
+The validator distinguishes valid IPv4 addresses from malformed or missing values.
 
-## Security Considerations
+**Important:** A valid IPv4 address is not necessarily malicious.
 
-The initial development environment uses simulated security alerts and documentation-only IP addresses.
+### 3. IPv4 Address Classification
 
-Future testing will be limited to authorized AWS resources. Credentials, sensitive information, and private security data will not be published.
+The application classifies IP addresses according to their network characteristics.
 
-## Learning Journal
+Tested classifications include:
 
-Each completed milestone will document:
+- `PRIVATE` — Private network addresses
+- `GLOBAL` — Globally reachable addresses
+- `LOOPBACK` — Local loopback addresses
+- `DOCUMENTATION` — Reserved documentation ranges
+- `INVALID` — Invalid IPv4 addresses
 
-- What I learned
-- How I implemented the functionality
-- Challenges encountered
-- Troubleshooting steps
-- Testing results
-- Improvements for future development
+Additional special-use address ranges may require further classification logic.
 
-## Disclaimer
+### 4. Severity-Based Alert Reporting
 
-This is an educational cybersecurity project under active development and is not intended for production incident response.
+The application processes the severity reported in the original alert.
+
+Supported severity categories include:
+
+- HIGH
+- MEDIUM
+- LOW
+- UNKNOWN
+
+These classifications are based on the input alert's reported severity, not independent threat intelligence analysis.
+
+### 5. Error Handling
+
+The application includes error handling for:
+
+- Missing JSON input files
+- Malformed JSON
+- Unexpected JSON structures
+- Missing IP address fields
+- Invalid IPv4 addresses
+
+The goal is to handle invalid input predictably without unexpected application failures.
+
+## Running the Project
+
+### Requirements
+
+- Python 3
+- A terminal or command-line interface
+- No third-party Python packages required for the current implementation
+
+### Instructions
+
+1. Clone the repository:
+
+   ```bash
+   git clone https://github.com/axelhine/aws-security-triage-pipeline.git
+   ```
+
+2. Navigate to the project directory:
+
+   ```bash
+   cd aws-security-triage-pipeline
+   ```
+
+3. Run the security alert processor:
+
+   ```bash
+   python main.py
+   ```
+
+   On Windows, the Python launcher can also be used:
+
+   ```powershell
+   py main.py
+   ```
+
+4. Run the standalone IOC validation and classification checks:
+
+   ```bash
+   python ioc_validator.py
+   ```
+
+## Example Output
+
+The following example uses simulated security alert data and documentation-only IP addresses.
+
+```text
+=== SECURITY ALERT REPORT ===
+Incident ID: INC-001
+Severity: HIGH
+Source IP: 192.0.2.10
+Destination IP: 198.51.100.25
+
+=== IOC VALIDATION ===
+Source IP: VALID
+Destination IP: VALID
+
+=== IP CLASSIFICATION ===
+Source IP: 192.0.2.10
+Classification: DOCUMENTATION
+
+Destination IP: 198.51.100.25
+Classification: DOCUMENTATION
+
+=== INITIAL ALERT CLASSIFICATION ===
+Priority: HIGH
+Action: Security analyst review recommended.
+```
+
+The example demonstrates structural validation and classification. It does not indicate that either address is malicious.
 
 ## Milestone 1: Python & Security Alert Foundations
 
 **Status:** Completed
 
+### Objective
+
+Develop a Python application capable of reading simulated cybersecurity alerts and generating structured security reports.
+
 ### Implementation
 
-Developed a Python application capable of reading simulated security alerts from JSON files, extracting incident information, and classifying alerts according to their reported severity.
+- Implemented JSON parsing using Python's `json` module.
+- Extracted incident metadata from simulated alerts.
+- Developed severity-based conditional reporting.
+- Implemented handling for missing severity values.
+- Added exception handling for malformed JSON and missing files.
+- Established Git and GitHub version control.
 
-### Features Implemented
+### Outcome
 
-- JSON file parsing
-- Incident metadata extraction
-- Conditional severity classification
-- Missing severity handling
-- Malformed JSON exception handling
-- Basic input structure validation
+Established a functional Python security alert processor that serves as the foundation for subsequent IOC analysis and AWS integration.
 
-### Testing
-
-Successfully tested:
-- Valid JSON alert processing
-- HIGH and LOW severity classifications
-- Missing severity values
-- Malformed JSON handling
-- Recovery after restoring a valid alert file
-
-### Skills Learned
-
-Python fundamentals, JSON parsing, conditional logic, exception handling, introductory input validation, and Git version control.
-
-### Limitations
-
-The application currently processes simulated alerts. It does not independently detect malicious activity, validate IP addresses, or integrate with live AWS telemetry.
 ## Milestone 2: IOC Extraction & Validation
 
-**Status:** In Progress
+**Status:** Completed
 
 ### Objective
-Develop a Python-based IOC validation module capable of examining IP addresses extracted from simulated security alerts.
 
-### Planned Implementation
-- Validate IPv4 addresses using Python's built-in `ipaddress` module.
-- Integrate validation with the existing JSON alert processor.
-- Classify IP addresses according to their network characteristics.
-- Handle malformed and missing indicators without crashing the application.
-- Document validation results and known limitations.
+Develop and integrate reusable IPv4 validation and classification functionality into the existing alert-processing pipeline.
 
-### Security Considerations
-A syntactically valid IP address is not necessarily malicious. IOC validation verifies the structure of an indicator, while threat intelligence enrichment and contextual analysis are needed to assess potential security risk.
+### Implementation
+
+- Created `ioc_validator.py`.
+- Implemented IPv4 syntax validation.
+- Integrated the validator with `main.py`.
+- Implemented IPv4 address classification.
+- Added handling for missing IP fields.
+- Conducted integration and regression testing.
+- Documented results and limitations.
 
 ### Testing
-Testing will include valid IPv4 addresses, malformed addresses, missing fields, and special-use address ranges.
 
-### Future Integration
-The validation module will eventually run within AWS Lambda as part of an automated serverless security triage pipeline.
+Testing covered:
+
+- Valid and invalid IPv4 addresses
+- Private IPv4 addresses
+- Globally reachable IPv4 addresses
+- Loopback addresses
+- Documentation-only addresses
+- Missing IP fields
+- Malformed JSON
+- Missing JSON files
+- Regression testing of existing alert-processing functionality
+
+Test cases and observed results are recorded in `tests/TEST_RESULTS.md`.
+
+### Outcome
+
+The pipeline can now validate and classify IPv4 indicators extracted from simulated alerts while preserving its original alert-processing functionality.
+
+## Planned AWS Architecture
+
+The future serverless architecture is intended to use:
+
+1. **Amazon VPC Flow Logs:** Collect network connection metadata from authorized AWS environments.
+2. **AWS Lambda:** Execute alert-processing and enrichment logic.
+3. **Amazon DynamoDB:** Store incident metadata and triage results.
+4. **Amazon S3:** Retain security evidence and generated reports.
+5. **AWS IAM:** Enforce least-privilege access to cloud resources.
+
+VPC Flow Logs provide network flow metadata rather than packet contents. Additional detection logic will be required to transform telemetry into security alerts.
+
+Additional AWS services may be introduced as needed.
+
+## Security Considerations
+
+- Current development uses simulated security alerts.
+- Documentation-only IP addresses are used for testing.
+- Future testing will be limited to authorized AWS resources.
+- Credentials, API keys, and sensitive information will not be committed to GitHub.
+- AWS permissions will follow least-privilege principles.
+- Threat intelligence results will be treated as supporting evidence rather than definitive proof of maliciousness.
+- AWS service costs and usage will be monitored during cloud integration.
+
+## Current Limitations
+
+- The pipeline currently runs locally.
+- It processes simulated JSON alerts rather than live AWS telemetry.
+- IPv4 is supported; IPv6 is not currently implemented.
+- IP address classification does not establish maliciousness.
+- External threat intelligence enrichment is not yet implemented.
+- Automated risk scoring is not yet implemented.
+- AWS deployment is not yet implemented.
+- The application is not intended for production incident response.
+
+## Next Development Phase
+
+### Milestone 3: Threat Intelligence Enrichment
+
+Planned activities include:
+
+- Evaluating public threat intelligence sources.
+- Integrating an external reputation API.
+- Enriching eligible IP indicators with reputation data.
+- Handling API errors and missing intelligence.
+- Recording evidence and enrichment results.
+- Documenting source limitations and analyst confidence.
+
+## Learning Journal
+
+Each milestone documents:
+
+- Skills developed
+- Implementation decisions
+- Challenges encountered
+- Troubleshooting steps
+- Test cases and observed results
+- Limitations and future improvements
+
+## Disclaimer
+
+This is an educational cybersecurity and cloud security automation project under active development. It is not intended for production incident response.

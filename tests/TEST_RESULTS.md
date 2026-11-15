@@ -96,3 +96,59 @@ address as INVALID.
 ### Conclusion
 The pipeline successfully handled an incomplete
 JSON alert while preserving its reporting functionality.
+
+## Final Regression Testing — Issue #4
+
+### Objective
+Verify that the complete alert-processing pipeline
+continues functioning after IOC validation and
+classification were integrated.
+
+| Test ID | Component | Expected Result | Actual Result | Status |
+|---|---|---|---|---|
+| TC-15 | JSON Processing | Alert loads | Alert loaded | PASS |
+| TC-16 | IOC Validation | Both IPs valid | Both VALID | PASS |
+| TC-17 | IP Classification | Both documentation | Both DOCUMENTATION | PASS |
+| TC-18 | Severity Classification | HIGH priority | HIGH priority | PASS |
+
+### Findings
+All four final regression tests passed.
+
+The pipeline successfully loaded a simulated
+security alert, validated both IPv4 addresses,
+classified their address types, and evaluated
+the reported severity.
+
+### Limitations
+- The pipeline currently processes simulated JSON alerts.
+- Only IPv4 addresses are supported.
+- IP classification does not determine maliciousness.
+- Threat intelligence enrichment is not yet implemented.
+- AWS integration has not yet been completed.
+
+### Conclusion
+The pipeline successfully completed its baseline
+regression tests without observed errors.
+
+## Error Handling Tests — Issue #4
+
+### Objective
+Verify that the alert processor handles malformed
+JSON and missing input files gracefully.
+
+
+| Test ID | Test Case | Expected Result | Actual Result | Status |
+|---|---|---|---|---|
+| TC-19 | Malformed JSON | Display JSON error | `ERROR: alert.json contains invalid JSON.` | PASS |
+| TC-20 | Missing alert.json | Display file-not-found error | `ERROR: alert.json could not be found.` | PASS |
+
+
+### Findings
+Both error-handling tests passed.
+
+The application displayed appropriate error messages
+without producing unhandled Python exceptions.
+
+### Conclusion
+The pipeline successfully handles malformed JSON
+and missing input files using exception handling.

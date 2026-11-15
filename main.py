@@ -2,7 +2,7 @@
 
 import json
 import sys
-from ioc_validator import validate_ip
+from ioc_validator import validate_ip, classify_ip
 
 # Attempt to load the security alert
 try:
@@ -23,10 +23,11 @@ if not isinstance(alert, dict):
     sys.exit(1)
 
 # Extract important information
-incident_id = alert["incident_id"]
+incident_id = alert.get("incident_id", "UNKNOWN")
 severity = alert.get("severity", "UNKNOWN")
-source_ip = alert["source_ip"]
-destination_ip = alert["destination_ip"]
+source_ip = alert.get("source_ip")
+destination_ip = alert.get("destination_ip")
+
 
 # Display the alert summary
 print("=== SECURITY ALERT REPORT ===")
@@ -35,6 +36,30 @@ print("Severity:", severity)
 print("Source IP:", source_ip)
 print("Destination IP:", destination_ip)
 print("=============================")
+
+# Validate IP addresses extracted from the alert
+print("\n=== IOC VALIDATION ===")
+
+if validate_ip(source_ip):
+    print("Source IP: VALID")
+else:
+    print("Source IP: INVALID")
+
+if validate_ip(destination_ip):
+    print("Destination IP: VALID")
+else:
+    print("Destination IP: INVALID")
+
+# Classify IP addresses
+print("\n=== IP CLASSIFICATION ===")
+
+print("Source IP:", source_ip)
+print("Classification:", classify_ip(source_ip))
+
+print("\nDestination IP:", destination_ip)
+print("Classification:", classify_ip(destination_ip))
+
+print("=========================")
 
 # Evaluate the alert's reported severity
 print("\n=== INITIAL ALERT CLASSIFICATION ===")
@@ -58,17 +83,3 @@ else:
 print("Destination IP:", destination_ip)
 print("=============================")
 
-# Validate the IP addresses extracted from the alert
-print("\n=== IOC VALIDATION ===")
-
-if validate_ip(source_ip):
-    print("Source IP: VALID")
-else:
-    print("Source IP: INVALID")
-
-if validate_ip(destination_ip):
-    print("Destination IP: VALID")
-else:
-    print("Destination IP: INVALID")
-
-print("======================")

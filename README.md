@@ -314,3 +314,42 @@ Each milestone documents:
 ## Disclaimer
 
 This is an educational cybersecurity and cloud security automation project under active development. It is not intended for production incident response.
+## Milestone 3: Threat Intelligence Enrichment
+
+**Status:** Completed — locally tested
+
+### Overview
+
+Implemented automated IPv4 threat intelligence enrichment using AlienVault OTX and Shodan. The enrichment module integrates with the existing security alert processing pipeline and provides additional context to support analyst investigations.
+
+### Features Implemented
+
+- **Enrichment eligibility:** Only eligible globally routable IPv4 addresses are submitted for external intelligence lookups.
+- **AlienVault OTX integration:** Retrieves reported reputation information, pulse counts, and available network metadata.
+- **Shodan integration:** Retrieves organization, ASN, and previously observed network service ports.
+- **Combined enrichment:** Coordinates both intelligence providers through a reusable `enrich_ip()` function.
+- **Provider failure handling:** Distinguishes successful enrichment, partial provider failure, and complete failure.
+- **Security controls:** Excludes private, loopback, documentation, and invalid IPv4 addresses from external lookups.
+- **Main pipeline integration:** Displays enrichment findings alongside alert information, IOC validation, IP classification, and initial alert priority.
+
+### Testing and Validation
+
+Four automated unit tests passed using Python's `unittest` and `unittest.mock` modules:
+
+1. Both providers return successful results.
+2. One provider fails while the other succeeds.
+3. Both providers fail.
+4. Ineligible IP addresses trigger no external API calls.
+
+Live API connectivity was also verified against the public IPv4 address `8.8.8.8`.
+
+### Limitations
+
+Threat intelligence findings provide investigative context, not definitive evidence of malicious behavior. External API results depend on provider availability, coverage, and data freshness.
+
+### Next Steps
+
+- Expand automated regression testing.
+- Improve the formatting of provider errors and missing fields.
+- Implement evidence-based alert risk scoring.
+- Prepare the pipeline for eventual AWS integration.

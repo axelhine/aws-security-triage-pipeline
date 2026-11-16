@@ -3,6 +3,34 @@
 import json
 import sys
 from ioc_validator import validate_ip, classify_ip
+from threat_intelligence import enrich_ip
+
+
+def display_enrichment(ip_address):
+    """
+    Enrich an IP address and display the results.
+    """
+
+    result = enrich_ip(ip_address)
+
+    print(f"\n=== THREAT INTELLIGENCE: {ip_address} ===")
+    print("Status:", result["status"])
+
+    if result["status"] == "skipped":
+        print("Reason:", result.get("reason"))
+        return
+
+    if "otx" in result:
+        otx = result["otx"]
+        print("OTX Status:", otx.get("status"))
+        print("OTX Reputation:", otx.get("reputation"))
+        print("OTX Pulse Count:", otx.get("pulse_count"))
+
+    if "shodan" in result:
+        shodan = result["shodan"]
+        print("Shodan Status:", shodan.get("status"))
+        print("Organization:", shodan.get("organization"))
+        print("Observed Ports:", shodan.get("ports"))
 
 # Attempt to load the security alert
 try:
@@ -49,6 +77,12 @@ if validate_ip(destination_ip):
     print("Destination IP: VALID")
 else:
     print("Destination IP: INVALID")
+
+print("\n=== AUTOMATED THREAT INTELLIGENCE ENRICHMENT ===")
+
+display_enrichment(source_ip)
+display_enrichment(destination_ip)
+
 
 # Classify IP addresses
 print("\n=== IP CLASSIFICATION ===")

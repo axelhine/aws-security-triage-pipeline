@@ -152,3 +152,44 @@ without producing unhandled Python exceptions.
 ### Conclusion
 The pipeline successfully handles malformed JSON
 and missing input files using exception handling.
+## Milestone 3 — Threat Intelligence Enrichment Testing
+
+**Test date:** November 16, 2026
+
+**Objective:** Verify successful integration of AlienVault OTX and Shodan threat intelligence enrichment into the existing security alert processing pipeline.
+
+### Automated Tests
+
+| Test Case | Expected Behavior | Result |
+|---|---|---|
+| Both intelligence providers succeed | Combined enrichment returns success | PASS |
+| One provider fails | Combined enrichment reports partial success | PASS |
+| Both providers fail | Combined enrichment reports an error | PASS |
+| Ineligible IP addresses | External API lookups are skipped | PASS |
+
+**Automated test execution:** 4 tests completed successfully using Python's `unittest` framework and mocked provider responses.
+
+### Integration Testing
+
+- JSON alert loading: PASS
+- Incident information extraction: PASS
+- IPv4 validation: PASS
+- IPv4 classification: PASS
+- Initial alert severity classification: PASS
+- Automated threat intelligence enrichment: PASS
+- Documentation IP addresses excluded from external enrichment: PASS
+
+### Live API Verification
+
+Previous live testing confirmed successful enrichment of `8.8.8.8` using AlienVault OTX and Shodan.
+
+The returned intelligence included reported reputation information, pulse count, organization, ASN, and observed ports.
+
+### Limitations
+
+- Threat intelligence data is dependent on external provider availability and coverage.
+- An absence of reported malicious activity does not establish that an IP address is benign.
+- Live API responses may change over time.
+- Automated tests use mocked responses and do not independently verify the accuracy of external intelligence.
+
+**Conclusion:** Milestone 3's enrichment functionality passed the documented automated and integration checks.
